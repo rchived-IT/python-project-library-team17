@@ -28,3 +28,40 @@ A menu-driven Python application for managing a library's day-to-day operations 
 - **Libraries:** datetime, os, logging, requests, pandas, matplotlib, bcrypt
 
 ## Project Structure
+src/
+├── main.py
+├── models/
+├── repositories/
+├── controllers/
+├── views/
+├── services/
+├── exceptions/
+└── utils/
+database/
+data/imports/
+tests/
+docs/
+logs/
+
+## Setup Instructions
+1. Clone the repository:
+
+git clone https://github.com/rchived-IT/python-project-library-team17.git
+
+2. Create and activate a virtual environment:
+
+python -m venv venv
+venv\Scripts\activate # Windows
+source venv/bin/activate # macOS/Linux
+
+3. Install dependencies:
+
+pip install -r requirements.txt
+
+4. Run the application:
+
+python src/main.py
+
+
+## Status
+🚧 In development
