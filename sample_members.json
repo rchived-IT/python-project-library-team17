@@ -1,0 +1,20 @@
+[
+    {
+        "name": "Esther Kavanamur",
+        "contact_number": "70067890",
+        "email": "esther.kavanamur@example.com",
+        "membership_status": "Active"
+    },
+    {
+        "name": "Simon Gigmai",
+        "contact_number": "70078901",
+        "email": "simon.gigmai@example.com",
+        "membership_status": "Active"
+    },
+    {
+        "name": "Agnes Wamp",
+        "contact_number": "70089012",
+        "email": null,
+        "membership_status": "Active"
+    }
+]

@@ -1,0 +1,4 @@
+title,author,isbn,genre,total_copies,available_copies
+The C Programming Language,Kernighan & Ritchie,9780131103627,Programming,2,2
+Structure and Interpretation of Computer Programs,Abelson & Sussman,9780262510875,Computer Science,2,2
+Refactoring,Martin Fowler,9780134757599,Software Engineering,3,3
