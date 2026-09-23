@@ -5,9 +5,9 @@
 **Assessment:** Team Project Assessment (Capstone)
 
 ## Team Members
-- [Full Name] — Team Lead / Lead Developer & Architect
-- [Full Name] — Database Engineer / QA & Test Lead
-- [Full Name] — Documentation Lead / Feature Developer
+- Rachael Makapa — Team Lead / Lead Developer & Architect
+- Dyan Koko — Database Engineer / QA & Test Lead
+- Vernorah Tipi — Documentation Lead / Feature Developer
 
 ## Project Overview
 A menu-driven Python application for managing a library's day-to-day operations — including book cataloguing, member registration, and borrowing/returning workflows. The system enforces authenticated, role-based access and persists all data in a relational database (SQLite), following a layered MVC architecture.
