@@ -6,7 +6,7 @@
 
 ## Team Members
 - Rachael Makapa — Team Lead / Lead Developer & Architect
-- Dyan Koko — Database Engineer / QA & Test Lead
+- Dyan Koka — Database Engineer / QA & Test Lead
 - Vernorah Tipi — Documentation Lead / Feature Developer
 
 ## Project Overview
