@@ -1,6 +1,6 @@
 # Library Management System
 
-**Course:** IT0206 – Advanced Computer Programming 2
+**Course:** IT0206 – Advanced Computer Programming
 **Team:** Group 17 (Team Project Assessment)
 **Repository:** github.com/rchived-IT/python-project-library-team17
 
@@ -148,7 +148,7 @@ The Proposal, SRS, Database Design, User Manual, Technical Documentation and Tes
 
 ## AI Usage Disclosure
 
-The first drafts of the six project documents were generated with Claude (Anthropic) from the project repository. Any other AI use is described in the Technical Documentation, Section 15.
+The first drafts of the six project documents were generated with Claude (Anthropic) from the project repository, and was reviewed and rewritten by the team. Any other AI use is described in the Technical Documentation, Section 15.
 
 ## Known Issues
 
