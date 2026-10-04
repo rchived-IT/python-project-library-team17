@@ -1,29 +1,31 @@
 # Requirements Traceability Matrix
 Library Management System — IT0206 Group 17
 
+This matrix maps each requirement to the code that implements it and the evidence that verifies it. Automated evidence is written as `file::test_name`; 'test_schema.py` is in the project root and all other test files are in `tests/`. Where no automated test exists, the evidence is stated as a manual check or code inspection.
+
 ## Functional Requirements
 
-| Code | Requirement | Description | Implementation Location |
-|------|-------------|-------------|--------------------------|
-| FR-1 | Authentication | Login with username/password, hashed passwords | `src/services/auth_service.py`, `src/models/user.py`, `src/repositories/user_repository.py`, `src/views/login_view.py`, `database/schema.sql` |
-| FR-2 | Role-Based Access | Menu options differ by role (Admin vs Staff) | `src/services/auth_service.py`, `src/controllers/`, `src/views/` |
-| FR-3 | Manage Books | Add/view/update/delete book records | `src/models/book.py`, `src/repositories/book_repository.py`, `src/controllers/book_controller.py`, `src/views/book_view.py` |
-| FR-4 | Manage Members | Add/view/update/delete member records | `src/models/member.py`, `src/repositories/member_repository.py`, `src/controllers/member_controller.py`, `src/views/member_view.py` |
-| FR-5 | Issue Book | Record issue date, due date, decrement copies | `src/models/loan.py`, `src/repositories/loan_repository.py`, `src/controllers/loan_controller.py`, `src/views/loan_view.py` |
-| FR-6 | Return Book | Update loan, increment copies, calculate fine | `src/models/loan.py`, `src/repositories/loan_repository.py`, `src/controllers/loan_controller.py`, `src/views/loan_view.py` |
-| FR-7 | Search & Filter | Search catalogue by title/author/genre | `src/repositories/book_repository.py`, `src/controllers/book_controller.py` |
-| FR-8 | Reporting | Most-borrowed books, overdue loans | `src/services/report_service.py`, `src/controllers/report_controller.py`, `src/views/report_view.py` |
-| FR-9 | Data Import | Bulk import books/members from CSV/JSON | `src/services/file_service.py`, `data/imports/` |
-| FR-10 | Logging | Log logins, errors, transactions | `src/utils/logger.py`, `logs/app.log` |
+| Code | Requirement | Description | Implementation Location | Verification Evidence |
+|------|-------------|-------------|--------------------------|-----------------------|
+| FR-1 | Authentication | Login with username/password and bcrypt-hashed passwords; three attempts | `src/controllers/auth_controller.py`, `src/models/user.py`, `data/database/schema.sql`, `seed_users.py` | `test_schema.py::test_username_must_be_unique`; `test_schema.py::test_role_must_be_valid`; manual login check with `test_login.py` |
+| FR-2 | Role-Based Access | Administrator-only administration menu and user-account controls | `src/main.py`, `src/views/admin_view.py`, `src/controllers/admin_controller.py`, `src/models/user.py` | `test_schema.py::test_role_must_be_valid`; manual check: a Librarian selecting option 7 is denied |
+| FR-3 | Manage Books | Add/view/update/delete book records with validation | `src/models/book.py`, `src/repositories/book_repository.py`, `src/services/book_service.py`, `src/views/book_view.py` | `tests/test_book_service.py::test_add_book`; `test_add_book_requires_title`; `test_add_book_requires_author`; `test_add_book_rejects_negative_copies`; `test_update_book`; `test_delete_book`; `test_schema.py::test_isbn_must_be_unique` |
+| FR-4 | Manage Members | Add/view/update/delete member records with validation | `src/models/member.py`, `src/repositories/member_repository.py`, `src/services/member_service.py`, `src/views/member_view.py` | `tests/test_member_service.py::test_add_member`; `test_add_member_requires_name`; `test_add_member_requires_contact_number`; `test_add_member_rejects_invalid_status`; `test_update_member`; `test_delete_member`; `test_schema.py::test_membership_status_must_be_valid` |
+| FR-5 | Issue Book | Record issue/due dates, validate active members and availability, decrement available copies in one transaction | `src/models/loan.py`, `src/repositories/loan_repository.py`, `src/services/loan_service.py`, `src/views/loan_view.py` | `tests/test_loan_service.py::test_borrow_book`; `test_borrow_book_rejects_invalid_dates`; `test_borrow_book_rejects_invalid_date_format`; `test_borrow_book_rejects_unavailable_book`; `test_schema.py::test_loan_requires_existing_book`; `test_loan_requires_existing_member`; `test_due_date_must_be_after_issue_date`; `test_valid_loan_can_be_inserted` |
+| FR-6 | Return Book | Update loan, restore available copies, calculate/record fine | `src/repositories/loan_repository.py`, `src/services/loan_service.py`, `src/views/loan_view.py` | `tests/test_loan_service.py::test_return_book`; `test_return_book_with_fine`; `test_calculate_fine_no_overdue_charge`; `test_schema.py::test_fine_amount_defaults_to_zero` |
+| FR-7 | Search & Filter | Search books by title, author, ISBN and genre; members by name, contact or email; loans by loan, book or member ID | `src/repositories/book_repository.py`, `src/repositories/member_repository.py`, `src/services/book_service.py`, `src/services/member_service.py`, `src/views/search_view.py` | `tests/test_book_service.py::test_search_books`; `tests/test_member_service.py::test_search_members` |
+| FR-8 | Reporting | Library summary, book availability, member status, loan summary, most-borrowed books and overdue loans; pandas CSV analytics and matplotlib loan chart | `src/services/loan_service.py`, `src/views/report_view.py`, `src/repositories/loan_repository.py`, `src/reports/report_renderer.py` | `tests/test_requirements.py::test_fr8_overdue_and_most_borrowed_reports`; `test_fr8_library_summary_report`; `tests/test_rubric_features.py::test_pandas_analytics_export`; `test_matplotlib_loan_chart`; `test_report_renderers_use_inheritance_and_overriding` |
+| FR-9 | Data Import | Bulk import books from CSV and members from JSON | `src/services/file_service.py`, `src/views/data_view.py`, `data/imports/` | `tests/test_file_service.py::test_import_books_and_members` |
+| FR-10 | Logging | Log authentication and major transactions/import/export operations | `src/utils/logger.py`, `src/controllers/auth_controller.py`, `src/controllers/admin_controller.py`, `src/services/loan_service.py`, `src/services/file_service.py`, `logs/app.log` | `tests/test_requirements.py::test_fr10_major_transactions_are_logged`; `test_fr10_import_and_export_are_logged` |
 
 ## Non-Functional Requirements
 
-| Code | Requirement | Description | Implementation Location |
-|------|-------------|-------------|--------------------------|
-| NFR-1 | Performance | Menu actions respond within 2 seconds | `src/controllers/`, `src/repositories/` |
-| NFR-2 | Security | Hashed passwords, parameterised queries | `src/services/auth_service.py`, `src/repositories/` |
-| NFR-3 | Reliability | No crashes; try/except/finally, custom exceptions | `src/exceptions/custom_exceptions.py`, `src/controllers/`, `src/repositories/` |
-| NFR-4 | Usability | Clear prompts, input validation, error messages | `src/views/`, `src/services/` |
-| NFR-5 | Maintainability | Layered MVC, modular, documented classes | `src/` (overall structure), `docs/technical_documentation.pdf` |
-| NFR-6 | Portability | Runs on Windows with Python 3.11+, no DB server | `requirements.txt`, `src/config.py`, `README.md` |
-| NFR-7 | Backup | Export data to CSV/JSON for recovery | `src/services/file_service.py` |
+| Code | Requirement | Description | Implementation Location | Verification Evidence |
+|------|-------------|-------------|--------------------------|-----------------------|
+| NFR-1 | Performance | Lightweight SQLite repository operations and indexed common lookups | `data/database/schema.sql`, `src/repositories/` | `tests/test_requirements.py::test_nfr1_required_sqlite_indexes_exist` |
+| NFR-2 | Security | bcrypt password hashing and parameterised SQL queries | `src/controllers/auth_controller.py`, `src/controllers/admin_controller.py`, `src/repositories/` | Code inspection (bcrypt in the controllers; `?` placeholders in all repository queries); manual login check with `test_login.py`. No automated security test. |
+| NFR-3 | Reliability | Expected failures represented with custom exceptions and handled at the console boundary; multi-step loan writes use commit/rollback | `src/exceptions/custom_exceptions.py`, `src/views/`, `src/services/file_service.py`, `src/repositories/loan_repository.py` | `tests/test_requirements.py::test_nfr3_invalid_import_uses_custom_exception` |
+| NFR-4 | Usability | Clear menus, prompts, confirmations, validation, and error messages | `src/views/` | `tests/test_requirements.py::test_nfr4_data_menu_has_clear_options`; service validation tests in `tests/test_book_service.py`, `tests/test_member_service.py`, `tests/test_loan_service.py` |
+| NFR-5 | Maintainability | Layered models/repositories/services/controllers/views with documentation | `src/`, `docs/requirements_traceability.md`, `README.md` | Project structure and documented traceability (code review) |
+| NFR-6 | Portability | Python 3.11+ target with SQLite and `python -m src.main` entry point | `requirements.txt`, `README.md`, `src/main.py` | `tests/test_requirements.py::test_nfr6_project_uses_python_311_plus_and_module_entry_point` |
+| NFR-7 | Backup | Export books/members and create a SQLite database backup | `src/services/file_service.py`, `src/views/data_view.py`, `data/exports/` | `tests/test_requirements.py::test_nfr7_database_backup_is_byte_for_byte`; `test_nfr7_exports_contain_current_data`; `tests/test_file_service.py::test_exports_and_database_backup` |
